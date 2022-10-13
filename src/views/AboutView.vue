@@ -5,9 +5,16 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
+import { ElNotification } from "element-plus";
 const count = ref(0);
 function count1() {
   count.value++;
+  ElNotification({
+    title: "功德无量",
+    message: "功德+1",
+    type: "success",
+    duration: "900",
+  });
 }
 
 onMounted(() => {

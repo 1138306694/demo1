@@ -1,9 +1,10 @@
 <template>
-  <div id="all" @click="count1">
+  <div id="top" @click="count1(2)">
     <div class="about">
-      <h1 @click="count1">今日累计功德 :{{ count }}</h1>
+      <h1>今日累计功德 :{{ count }}</h1>
     </div>
-
+  </div>
+  <div id="but" @click="count1(1)">
     <div class="demo-datetime-picker">
       <div class="block">
         <span class="demonstration"
@@ -33,10 +34,17 @@
 <script scope setup>
 import { ref, onMounted } from "vue";
 import CountDown from "../components/CountDown.vue";
+import { ElNotification } from "element-plus";
 const afterSixTime = ref("");
 const count = ref(0);
-function count1() {
-  count.value++;
+function count1(int) {
+  count.value = count.value + int;
+  ElNotification({
+    title: "功德无量",
+    message: "功德 + " + int,
+    type: "success",
+    duration: "900",
+  });
 }
 
 onMounted(() => {
@@ -58,7 +66,13 @@ export default {
   },
 
   mounted() {
-    window.addEventListener("mousedown", this.count1());
+    this.count = 8;
+    ElNotification({
+      title: "初来乍到",
+      message: "功德 + 8",
+      type: "success",
+      duration: "900",
+    });
   },
 };
 </script>
