@@ -1,5 +1,5 @@
 <template>
-  <div id="top" @click="count1(2, '功德加倍无量', '功德')">
+  <div id="top" @click="count1(3, '功德加倍无量', '功德')">
     <div class="about">
       <el-tooltip content="功 · 德 · 加 · 倍" effect="customized">
         <el-button size="large" text="true" bg="true" round="true"
@@ -8,7 +8,7 @@
       </el-tooltip>
     </div>
   </div>
-  <div id="but" @click="count1(1, '功德无量', '功德')">
+  <div id="but" @click="count1(1.5, '功德无量', '功德')">
     <div class="demo-datetime-picker">
       <div class="block">
         <span class="demonstration"
