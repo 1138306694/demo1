@@ -48,6 +48,13 @@ function count1(int) {
 }
 
 onMounted(() => {
+  count.value = 8;
+  ElNotification({
+    title: "初来乍到",
+    message: "功德 + 8",
+    type: "success",
+    duration: "900",
+  });
   console.log(`今日累计功德: ${count.value}`);
 });
 </script>
@@ -65,15 +72,7 @@ export default {
     CountDown,
   },
 
-  mounted() {
-    this.count = 8;
-    ElNotification({
-      title: "初来乍到",
-      message: "功德 + 8",
-      type: "success",
-      duration: "900",
-    });
-  },
+  mounted() {},
 };
 </script>
 
