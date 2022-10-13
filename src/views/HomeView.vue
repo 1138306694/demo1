@@ -3,7 +3,7 @@
     <div class="about">
       <el-tooltip content="功 · 德 · 加 · 倍" effect="customized">
         <el-button size="large" text="true" bg="true" round="true"
-          >今日累计功德 :{{ count }}</el-button
+          >今日累计功德 :{{ Math.round(count * 10) / 10 }}</el-button
         >
       </el-tooltip>
     </div>
