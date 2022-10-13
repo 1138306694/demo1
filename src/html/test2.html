@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            width: 200px;
+            height: 100px;
+            border: 1px solid red;
+            overflow: auto;
+            /* 水平居中 */
+            text-align: center;
+            /* 垂直居中 设置文字行高 line-height 等于盒子高度
+               多行文本垂直居中，让元素高度自适应，或者正好等于多行文字的高度，设置元素内边距上下值相同
+            */
+            /* line-height: 100px; */
+            margin-top: 5px;
+            /* padding-top: 50px; */
+            /* padding-bottom: 50px; */
+        }
+
+        span {
+            border: 1px solid green;
+            /* overflow: scroll; */
+            border-color: aqua;
+
+        }
+
+        .box {
+            width: 300px;
+            height: 300px;
+            padding: 10px 0px;
+        }
+
+        .demo {
+            width: 100px;
+            height: 80px;
+            border-color: blue;
+            border-width: 2px;
+            margin: 50% auto;
+        }
+
+        .box1 {
+            width: 1000px;
+            height: 100px;
+            border-color: bisque;
+            border-width: 1px;
+        }
+
+        .box1 p {
+            width: 200px;
+            height: 90px;
+            background-color: pink;
+            float: left;
+            margin-left: 10px;
+            margin-right: 40px;
+
+        }
+
+        .box2 {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #00f;
+            overflow: visible;
+        }
+
+        .box2 p {
+            /* width: 200px; */
+            height: 100px;
+            border: 20px dashed green;
+            margin-right: 20px;
+        }
+
+        .box3 .box4 {
+
+            float: none;
+        }
+
+        .box3 {
+            width: 50px;
+            height: 50px;
+            background-color: aquamarine;
+            margin-bottom: 100px;
+        }
+
+        .box4 {
+            width: 50px;
+            height: 50px;
+            margin-top: 120px;
+            background-color: aquamarine;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="span1">
+        hahahhahahhahahhahahhahahhahahhahahhah
+        ahhahahhahahhahahhahahhahahhahahhahahha
+        hahhahahhahahhahahhahahhahahhah
+        ahhahahhahahhahahhahahhahahhahahhahah
+        hahahhahahhahahhahahhahahhahahhahahhahah
+        hahahhahahhahahhahahhahah
+        hahahhahah
+        hahah
+        hahah
+        hahah
+        hahah
+        hahah
+        hahah
+    </div>
+    <div class="box">
+        <div class="demo">
+            demo demo demo
+        </div>
+    </div>
+    <div class="box1">
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </div>
+
+    <div class="box2">
+        <p>
+
+        </p>
+    </div>
+
+
+    <span>
+        222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+    </span>
+
+
+    <div class="box3">
+        1
+    </div>
+    <div class="box4">
+        2
+    </div>
+</body>
+
+</html>

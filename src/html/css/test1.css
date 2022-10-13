@@ -1,0 +1,41 @@
+/* * {
+    background-color: beige;
+} */
+p.div {
+    color: red;
+    width: 400px;
+    background-color: aliceblue ;
+    margin: 0;
+    
+}
+body,p.div,div {
+    background-color: pink ;
+    color: green;
+}
+/* @import url(); */
+/* p {
+    font-size: 5px;
+    color: aqua;
+} */
+/* #id1{
+    color: brown;
+    font-size: 22px;
+    background-color: lightcyan;
+} */
+/* .class1{
+    background-color: red;
+    color: brown;
+}
+.class2{
+    background-color:green;
+    color: black;
+}
+div div {
+    background-color: aquamarine;
+}
+div div div {
+    background-color: rebeccapurple;
+}
+div {
+    background-color: aquamarine;
+} */

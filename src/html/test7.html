@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                count: 0
+            }
+        },
+        methods: {
+            count1() {
+                this.count++
+            }
+        },
+        mounted() {
+            console.log(`The initial count is ${this.count}.`)
+        }
+    })
+
+
+</script>
+<template>
+    <button @click="count1">Count is: {{ count }}</button>
+</template>
+
+<body>
+
+</body>
+
+</html>
