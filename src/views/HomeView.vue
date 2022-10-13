@@ -1,7 +1,11 @@
 <template>
   <div id="top" @click="count1(2)">
     <div class="about">
-      <h1>今日累计功德 :{{ count }}</h1>
+      <el-tooltip content="功 · 德 · 加 · 倍" effect="customized">
+        <el-button size="large" text="true" bg="true" round="true"
+          >今日累计功德 :{{ count }}</el-button
+        >
+      </el-tooltip>
     </div>
   </div>
   <div id="but" @click="count1(1)">
@@ -97,5 +101,18 @@ export default {
   color: var(--el-text-color-secondary);
   font-size: 14px;
   margin-bottom: 20px;
+}
+</style>
+
+<style>
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: linear-gradient(45deg, #b2e68d, #bce689);
+  right: 0;
 }
 </style>

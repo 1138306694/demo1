@@ -8,7 +8,9 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CountDown: typeof import('./src/components/CountDown.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
