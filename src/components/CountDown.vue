@@ -8,14 +8,14 @@
 export default {
   data() {
     return {
-      content: "",
+      content: "快选时间吧，都要干活了",
     };
   },
 
   props: {
     //接收父组件的数据
     endTime: { type: String, default: "" },
-    endText: { type: String, default: "活动已结束" },
+    endText: { type: String, default: "还不走等啥呢" },
   },
   watch: {
     //监听时间的变化
@@ -25,7 +25,7 @@ export default {
     },
   },
   mounted() {
-    this.countdowm(this.endTime);
+    // this.countdowm(this.endTime);
   },
   methods: {
     cacheOldWatch() {

@@ -1,13 +1,19 @@
 <template>
+  <div class="about">
+    <h1 @click="count1">今日累计功德 :{{ count }}</h1>
+  </div>
+
   <div class="demo-datetime-picker">
     <div class="block">
-      <span class="demonstration">时间:{{ afterSixTime / 1000 }}</span>
+      <span class="demonstration"
+        >时间:{{ afterSixTime / 1000 + 9 * 3600 }}</span
+      >
       <el-date-picker
         v-model="afterSixTime"
         type="datetime"
-        placeholder="选择时间"
+        placeholder="选择工作时间"
         default-value="2022-10-12"
-        format="YYYY-MM-DD hh:mm:ss"
+        format="YYYY-MM-DD HH:mm:ss"
         value-format="x"
       />
     </div>
@@ -16,13 +22,24 @@
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
     <!-- <HelloWorldss msg="哈哈哈哈哈哈" /> -->
-    <CountDown :endTime="afterSixTime / 1000" :endText="hhhhh" />
+    <CountDown
+      :endTime="afterSixTime / 1000 + 9 * 3600"
+      :endText="还不走等啥呢"
+    />
   </div>
 </template>
 <script scope setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import CountDown from "../components/CountDown.vue";
 const afterSixTime = ref("");
+const count = ref(0);
+function count1() {
+  count.value++;
+}
+
+onMounted(() => {
+  console.log(`今日累计功德: ${count.value}`);
+});
 </script>
 
 
