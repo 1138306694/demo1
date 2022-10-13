@@ -1,17 +1,15 @@
 <template>
-  <div id="top">
-    <div class="about">
-      <el-tooltip
-        @click="count1(3, '功德加倍无量', '功德')"
-        content="功 · 德 · 加 · 倍"
-        effect="customized"
-      >
-        <el-button size="large" text="true" bg="true" round="true"
-          >今日累计功德 :{{ Math.round(count * 10) / 10 }}</el-button
-        >
-      </el-tooltip>
-    </div>
-  </div>
+  <!-- <div id="top" @click="count1(1.5, '功德无量', '功德')"></div> -->
+  <el-tooltip content="功 · 德 · 加 · 倍" effect="customized">
+    <el-button
+      @click="count1(3, '功德加倍无量', '功德')"
+      size="large"
+      text="true"
+      bg="true"
+      round="true"
+      >今日累计功德 :{{ Math.round(count * 10) / 10 }}</el-button
+    >
+  </el-tooltip>
   <div id="but" @click="count1(1.5, '功德无量', '功德')">
     <div class="demo-datetime-picker">
       <div class="block">
