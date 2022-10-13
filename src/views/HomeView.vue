@@ -1,5 +1,5 @@
 <template>
-  <div id="top" @click="count1(2)">
+  <div id="top" @click="count1(2, '功德加倍无量', '功德')">
     <div class="about">
       <el-tooltip content="功 · 德 · 加 · 倍" effect="customized">
         <el-button size="large" text="true" bg="true" round="true"
@@ -8,7 +8,7 @@
       </el-tooltip>
     </div>
   </div>
-  <div id="but" @click="count1(1)">
+  <div id="but" @click="count1(1, '功德无量', '功德')">
     <div class="demo-datetime-picker">
       <div class="block">
         <span class="demonstration"
@@ -31,6 +31,9 @@
       <CountDown
         :endTime="afterSixTime / 1000 + 9 * 3600"
         :endText="还不走等啥呢"
+        @addGood="
+          count1(Math.round(Math.random() * 10) / 10, '工作修行', '功德')
+        "
       />
     </div>
   </div>
@@ -41,24 +44,25 @@ import CountDown from "../components/CountDown.vue";
 import { ElNotification } from "element-plus";
 const afterSixTime = ref("");
 const count = ref(0);
-function count1(int) {
-  count.value = count.value + int;
+function count1(star, tit, mess) {
+  count.value = count.value + star;
   ElNotification({
-    title: "功德无量",
-    message: "功德 + " + int,
+    title: tit,
+    message: mess + " + " + star,
     type: "success",
     duration: "900",
   });
 }
 
 onMounted(() => {
-  count.value = 8;
-  ElNotification({
-    title: "初来乍到",
-    message: "功德 + 8",
-    type: "success",
-    duration: "900",
-  });
+  count1(8, "初来乍到", "功德");
+  // count.value = 8;
+  // ElNotification({
+  //   title: "初来乍到",
+  //   message: "功德 + 8",
+  //   type: "success",
+  //   duration: "900",
+  // });
   console.log(`今日累计功德: ${count.value}`);
 });
 </script>

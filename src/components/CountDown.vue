@@ -1,17 +1,19 @@
 <template>
   <span :endTime="endTime" :endText="endText">
-    <slot>{{ content }}</slot>
+    <slot>{{ cont }}</slot>
   </span>
 </template>
+
+<script setup>
+</script>
 
 <script>
 export default {
   data() {
     return {
-      content: "快选时间吧，都要干活了",
+      cont: "快选时间吧，都要干活了",
     };
   },
-
   props: {
     //接收父组件的数据
     endTime: { type: String, default: "" },
@@ -59,10 +61,11 @@ export default {
           if (day <= 0 && hour <= 0) {
             format = `${min}分${sec}秒`;
           }
-          self.content = format;
+          self.cont = format;
+          self.$emit("addGood");
         } else {
           clearInterval(timer);
-          self.content = self.endText;
+          self.cont = self.endText;
         }
       }, 1000);
     },
