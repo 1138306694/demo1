@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     CountDown: typeof import('./src/components/CountDown.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
+    ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
