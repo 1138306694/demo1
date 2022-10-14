@@ -30,6 +30,7 @@
     <div class="home">
       <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
       <!-- <HelloWorldss msg="哈哈哈哈哈哈" /> -->
+
       <CountDown
         :endTime="afterSixTime / 1000 + 9 * 3600"
         :endText="还不走等啥呢"

@@ -61,7 +61,7 @@ export default {
           if (day <= 0 && hour <= 0) {
             format = `${min}分${sec}秒`;
           }
-          self.cont = format;
+          self.cont = "今日修行还有  " + format + "  结束";
           self.$emit("addGood");
         } else {
           clearInterval(timer);
