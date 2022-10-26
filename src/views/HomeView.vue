@@ -23,13 +23,11 @@
   <div id="but" @click="count1(1.5, '功德无量', '功德')">
     <div class="demo-datetime-picker">
       <div class="block">
-        <span class="demonstration"
-          >时间:{{ afterSixTime / 1000 + 9 * 3600 }}</span
-        >
+        <span class="demonstration">时间:{{ afterSixTime / 1000 }}</span>
         <el-date-picker
           v-model="afterSixTime"
           type="datetime"
-          placeholder="选择打卡时间"
+          placeholder="今日修行结束时间"
           default-value="2022-10-12"
           format="YYYY-MM-DD HH:mm:ss"
           value-format="x"
@@ -42,7 +40,7 @@
       <!-- <HelloWorldss msg="哈哈哈哈哈哈" /> -->
 
       <CountDown
-        :endTime="afterSixTime / 1000 + 9 * 3600"
+        :endTime="afterSixTime / 1000"
         :endText="还不走等啥呢"
         @addGood="
           count1(Math.round(Math.random() * 10) / 10, '工作修行', '功德')
