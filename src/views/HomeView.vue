@@ -59,7 +59,7 @@
         <span v-if="youName != null || youName != ''">you:{{ youName }}</span>
       </p>
       <el-button
-        v-if="sayGoodMsgCount > 0"
+        v-if="sayGoodMsgCount > 0 && checkNameIsOver()"
         style="width: 100px; background-color: lightgreen"
         type="primary"
         @click="sayGood(myName, youName)"
@@ -161,14 +161,8 @@ function popMessage(title, content, type, time) {
     duration: time,
   });
 }
-async function sayGood(you, my) {
-  if (
-    myName.value != null &&
-    myName.value != "" &&
-    youName.value != null &&
-    youName.value != "" &&
-    sayGoodMsgCount.value > 0
-  ) {
+async function sayGood(my, you) {
+  if (checkNameIsOver() && sayGoodMsgCount.value > 0) {
     youNameInputIsHave.value = false;
     myNameInputIsHave.value = false;
     // http://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc
@@ -187,12 +181,12 @@ async function sayGood(you, my) {
       .replace(/我/g, myName.value);
     sayGoodMsgCount.value = sayGoodMsgCount.value - 1;
   } else {
-    if (youName.value != null && youName.value != "") {
+    if (getCache("you") != null && getCache("you") != "") {
       youNameInputIsHave.value = false;
     } else {
       youNameInputIsHave.value = true;
     }
-    if (myName.value != null && myName.value != "") {
+    if (getCache("my") != null && getCache("my") != "") {
       myNameInputIsHave.value = false;
     } else {
       myNameInputIsHave.value = true;
@@ -229,6 +223,16 @@ function getCache(key) {
 function setNmae() {
   youName.value = getCache("you");
   myName.value = getCache("my");
+}
+
+function checkNameIsOver() {
+  let you = getCache("you");
+  let my = getCache("my");
+  if (my != null && my != "" && you != null && you != "") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 onMounted(() => {
