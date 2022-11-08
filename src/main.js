@@ -3,8 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'element-plus/dist/index.css'
-import axios from "axios";
+import ElementPlus from 'element-plus'
+// import axios from 'axios'
 
-document.write('Hello Webpack Ts')
+const app = createApp(App);
+app.use(store)
+app.use(router)
+app.use(ElementPlus, { size: 'large', zIndex: 3000 })
+app.mount('#app')
 
-createApp(App).use(store).use(router).mount('#app').use(axios)
+// createApp(App).use(store).use(router).mount('#app').config.globalProperties.$http = axios
