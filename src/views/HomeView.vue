@@ -175,7 +175,7 @@ async function sayGood(my, you) {
     myNameInputIsHave.value = false;
     // http://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc
     let result = await request.fetchGet(
-      "http://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc",
+      "https://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc",
       ""
     );
     console.log(
