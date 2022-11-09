@@ -59,18 +59,18 @@
         <span v-if="youName != null || youName != ''">you:{{ youName }}</span>
       </p>
       <el-button
-        v-if="sayGoodMsgCount > 0 && checkNameIsOver()"
+        v-if="sayGoodMsgMaxCount > 0 && checkNameIsOver()"
         style="width: 100px; background-color: lightgreen"
         type="primary"
         @click="sayGood(myName, youName)"
       >
-        <span v-if="sayGoodMsgCount == sayGoodMsgMaxCount"
-          >夸一下,{{ sayGoodMsgCount }}次</span
+        <span v-if="sayGoodMsgMaxCount == maxCount"
+          >夸一下,{{ sayGoodMsgMaxCount }}次</span
         >
-        <span v-if="sayGoodMsgCount < sayGoodMsgMaxCount && sayGoodMsgCount > 0"
-          >再夸一下,{{ sayGoodMsgCount }}次</span
+        <span v-if="sayGoodMsgMaxCount > 0"
+          >再夸一下,{{ sayGoodMsgMaxCount }}次</span
         >
-        <span v-if="sayGoodMsgCount < 0">今天夸够了啊，要知足</span>
+        <span v-if="sayGoodMsgMaxCount < 0">今天夸够了啊，要知足</span>
       </el-button>
       <p>
         {{ sayGoodMsg }}
@@ -94,6 +94,7 @@
           </template>
         </el-input>
       </div>
+
       <div v-if="myNameInputIsHave">
         <el-input
           v-model="myName"
@@ -123,28 +124,35 @@ import CountDown from "../components/CountDown.vue";
 import request from "../http.js";
 import { ElNotification } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+import moment from "moment";
 const afterSixTime = ref("");
 const count = ref(0);
 const visible = ref(false);
 
 const addGoodMessage = ref("");
-//最大夸奖次数
-const sayGoodMsgMaxCount = 10;
-const sayGoodMsgCount = ref(sayGoodMsgMaxCount);
 
 const youName = ref("");
 const myName = ref("");
+//配置是否展示输入框
 const youNameInputIsHave = ref(true);
 const myNameInputIsHave = ref(true);
 
-const sayGoodMsg = ref("记得设置名字呀");
+//缓存夸奖次数
+const sayGoodMsgMaxCount = ref();
+//总计
+const maxCount = ref(10);
 
+const sayGoodMsg = ref("记得设置名字呀");
+//缓存最大次数的key
+let key = "sayGoodMsgMaxCount";
+//功德累计
 function count1(star, tit, mess) {
   count.value = count.value + star;
   visible.value = true;
   addGoodMessage.value = tit + " " + mess + " + " + star;
 }
 
+//弹窗提示
 function popMessage(title, content, type, time) {
   if (type == true) {
     type = "success";
@@ -162,7 +170,7 @@ function popMessage(title, content, type, time) {
   });
 }
 async function sayGood(my, you) {
-  if (checkNameIsOver() && sayGoodMsgCount.value > 0) {
+  if (checkNameIsOver() && sayGoodMsgMaxCount.value > 0) {
     youNameInputIsHave.value = false;
     myNameInputIsHave.value = false;
     // http://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc
@@ -175,49 +183,81 @@ async function sayGood(my, you) {
       result.data.newslist[0].content
         .replace(/你/g, youName.value)
         .replace(/我/g, myName.value)
+        .replace(/XXX/g, youName.value)
     );
     sayGoodMsg.value = result.data.newslist[0].content
       .replace(/你/g, youName.value)
-      .replace(/我/g, myName.value);
-    sayGoodMsgCount.value = sayGoodMsgCount.value - 1;
+      .replace(/我/g, myName.value)
+      .replace(/XXX/g, youName.value);
+    //修改页面缓存次数
+    sayGoodMsgMaxCount.value = sayGoodMsgMaxCount.value - 1;
+    //修改浏览器缓存中的次数
+    let cacheCount = getCache(key);
+    cacheCount.count = cacheCount.count - 1;
+    saveCache(key, cacheCount);
   } else {
-    if (getCache("you") != null && getCache("you") != "") {
+    if (getCache("you")) {
       youNameInputIsHave.value = false;
     } else {
       youNameInputIsHave.value = true;
     }
-    if (getCache("my") != null && getCache("my") != "") {
+    if (getCache("my")) {
       myNameInputIsHave.value = false;
     } else {
       myNameInputIsHave.value = true;
     }
   }
-  if (sayGoodMsgCount.value < 1) {
+  if (sayGoodMsgMaxCount.value < 1) {
     sayGoodMsg.value = "今天夸够了啊，就不能知足亿点点";
   }
 }
 
+function getSayGoodMsgMaxCount() {
+  let nowDate = moment(new Date()).format("YYYY-MM-DD");
+  let cacheCount = getCache(key);
+  if (!cacheCount) {
+    //新的
+    let cacheValue = {};
+
+    cacheValue.count = maxCount.value;
+    cacheValue.date = nowDate;
+
+    //保存新的
+    saveCache(key, cacheValue);
+    //返回新的
+    return cacheValue.count;
+  } else {
+    //存在，比较时间
+    if (cacheCount.date == nowDate) {
+      //时间范围内
+      return cacheCount.count;
+    } else {
+      //新的
+      let cacheValue = {};
+      cacheValue.count = maxCount.value;
+      cacheValue.date = nowDate;
+      saveCache(key, cacheValue);
+      //重新判断
+      getSayGoodMsgMaxCount();
+    }
+  }
+}
+
 function saveCache(key, value) {
-  if (value == null || value == "") {
-    popMessage("设置有误", key + "名字不存在", false, "1100");
+  if (!value) {
+    popMessage("设置有误", key + "名字不存在", false, 1100);
   } else {
     window.localStorage.setItem(key, JSON.stringify(value));
-    popMessage("设置完成", key + "名字为:" + value, true, "900");
   }
-
-  //刷新查看是否加载值
-  sayGood(myName, youName);
-  // localStorage.setItem(key, value);
+  if (key == "my" || key == "you") {
+    popMessage("设置完成", key + "名字为:" + JSON.stringify(value), true, 1900);
+    //刷新查看是否加载值
+    sayGood(myName, youName);
+  }
 }
 function getCache(key) {
-  console.log(
-    key,
-    "=====",
-    JSON.parse(window.localStorage.getItem(key) || "[]")
-  );
-  return JSON.parse(window.localStorage.getItem(key) || "[]");
-
-  // return localStorage.key;
+  console.log(key, "=====", JSON.parse(window.localStorage.getItem(key)));
+  return JSON.parse(window.localStorage.getItem(key));
 }
 
 function setNmae() {
@@ -228,7 +268,8 @@ function setNmae() {
 function checkNameIsOver() {
   let you = getCache("you");
   let my = getCache("my");
-  if (my != null && my != "" && you != null && you != "") {
+
+  if (my && you) {
     return true;
   } else {
     return false;
@@ -239,6 +280,8 @@ onMounted(() => {
   count1(8, "初来乍到", "功德");
 
   console.log(`今日累计功德: ${count.value}`);
+  //获取今日可以操作的最大夸夸次数
+  sayGoodMsgMaxCount.value = getSayGoodMsgMaxCount();
 
   //获取缓存用户名称
   setNmae();
