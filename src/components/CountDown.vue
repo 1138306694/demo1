@@ -63,7 +63,7 @@ export default {
           }
           self.cont = "今日修行还有  " + format + "  结束";
           self.$emit("addGood");
-          if (day == 0 && hour == 0 && min == 3 && sec == 0) {
+          if (day == 0 && hour == 0 && min == 1 && sec == 0) {
             //最后三分钟发送短信提醒
             console.log("剩余时间已到开始发送短信");
             self.$emit("sendMsgAli");
