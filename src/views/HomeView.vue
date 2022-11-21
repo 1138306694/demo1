@@ -47,6 +47,7 @@
             @addGood="
               count1(Math.round(Math.random() * 10) / 10, '工作修行', '功德')
             "
+            @sendMsgAli="sendMsgAli()"
           />
         </div>
       </div>
@@ -115,6 +116,24 @@
           </template>
         </el-input>
       </div>
+      <div v-if="myPhoneInputIsHave">
+        <el-input
+          v-model="phone"
+          placeholder="临近下班提醒短信手机号"
+          size="small"
+          class="w-50 m-2"
+          clearable
+        >
+          <template #append>
+            <el-button
+              type="primary"
+              style="width: 100px; background-color: lightgreen"
+              @click="saveCache('phone', phone)"
+              >set My</el-button
+            >
+          </template>
+        </el-input>
+      </div>
     </div>
   </el-config-provider>
 </template>
@@ -131,11 +150,14 @@ const visible = ref(false);
 
 const addGoodMessage = ref("");
 
+//配置输入框绑定的变量
 const youName = ref("");
 const myName = ref("");
+const phone = ref("");
 //配置是否展示输入框
 const youNameInputIsHave = ref(true);
 const myNameInputIsHave = ref(true);
+const myPhoneInputIsHave = ref(true);
 
 //缓存夸奖次数
 const sayGoodMsgMaxCount = ref();
@@ -210,6 +232,12 @@ async function sayGood(my, you) {
   if (sayGoodMsgMaxCount.value < 1) {
     sayGoodMsg.value = "今天夸够了啊，就不能知足亿点点";
   }
+  //检查打卡提醒手机号是否添加
+  if (getCache("phone")) {
+    myPhoneInputIsHave.value = false;
+  } else {
+    myPhoneInputIsHave.value = true;
+  }
 }
 
 function getSayGoodMsgMaxCount() {
@@ -242,6 +270,22 @@ function getSayGoodMsgMaxCount() {
     }
   }
 }
+// 发送阿里短信提醒下班
+async function sendMsgAli() {
+  let name = getCache("you");
+  let phone = getCache("phone");
+  if (name && phone) {
+    //内容已读取，允许发送
+    let result = await request.fetchPost("/send/msg/ali", {
+      name: name,
+      phone: phone,
+    });
+    console.log("发送完成，发送结果" + result.data);
+    popMessage("下班提醒", result.data.data, result.data.success, 10000);
+  } else {
+    popMessage("下班提醒失败", "读取失败:name" + name + "phone：" + phone);
+  }
+}
 
 function saveCache(key, value) {
   if (!value) {
@@ -249,8 +293,8 @@ function saveCache(key, value) {
   } else {
     window.localStorage.setItem(key, JSON.stringify(value));
   }
-  if (key == "my" || key == "you") {
-    popMessage("设置完成", key + "名字为:" + JSON.stringify(value), true, 1900);
+  if (key == "my" || key == "you" || key == "phone") {
+    popMessage("设置完成", key + "为:" + JSON.stringify(value), true, 1900);
     //刷新查看是否加载值
     sayGood(myName, youName);
   }

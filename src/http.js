@@ -9,8 +9,7 @@ axios.defaults.headers.get['X-SOURCE-FROM']  = 'wehat';
 console.log(axios.defaults, '......axios.......');
 
 
-axios.defaults.baseURL = 'http://wechat.nxqlhhk.top/' //生产环境;
-
+axios.defaults.baseURL = 'https://wechat.nxqlhhk.top/' //生产环境;  49.232.162.50
 // axios.defaults.headers.common['token'] = "";
 
 // POST传参序列化(添加请求拦截器)
@@ -107,3 +106,5 @@ export default {
     fetchGet,
     fetchDelete,
 }
+
+
