@@ -135,6 +135,27 @@
         </el-input>
       </div>
     </div>
+    <!-- 日期计算 -->
+    <div class="top">
+      <div class="date">
+        <el-input
+          v-model="sourceDate"
+          type="date"
+          placeholder="请输入计算开始时间"
+        />
+      </div>
+      <div class="date">
+        <el-input-number
+          v-model="addDay"
+          :min="-9999"
+          :max="9999"
+          @change="calculateDateChange"
+        />
+      </div>
+      <div class="dateResult">
+        <el-input v-model="calculateResult" disabled placeholder="计算结果" />
+      </div>
+    </div>
   </el-config-provider>
 </template>
 <script scope setup>
@@ -149,6 +170,11 @@ const count = ref(0);
 const visible = ref(false);
 
 const addGoodMessage = ref("");
+// 计算日期的 开始日期 和加减天数
+const addDay = ref(1);
+const sourceDate = ref();
+//计算结果
+const calculateResult = ref();
 
 //配置输入框绑定的变量
 const youName = ref("");
@@ -319,6 +345,28 @@ function checkNameIsOver() {
     return false;
   }
 }
+// 计算日期
+async function calculateDateChange() {
+  console.log(
+    "sourceDate:::::",
+    sourceDate.value,
+    "------addDay",
+    addDay.value
+  );
+  let result = await request.fetchGet(
+    "/until/calculate/date?source=" + sourceDate.value + "&day=" + addDay.value,
+    ""
+  );
+
+  console.log("计算结果：", result.data);
+  if (result.data) {
+    calculateResult.value = result.data.data;
+  } else {
+    (calculateResult.value = "计算有误，请检查开始日期:"),
+      sourceDate.value + "计算天数:",
+      addDay.value;
+  }
+}
 
 onMounted(() => {
   count1(8, "初来乍到", "功德");
@@ -389,5 +437,16 @@ export default {
   background-color: #b2e68d;
   margin: 30px;
   border: 1px solid black;
+}
+
+.date {
+  width: 200px;
+  float: left;
+}
+.dateResult {
+  width: 180px;
+  float: left;
+  margin-left: 110px;
+  margin-top: 40px;
 }
 </style>
