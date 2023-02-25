@@ -1,18 +1,37 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import MessageView from '../views/MessageView.vue'
+import LittleTool from '@/views/LittleTool.vue'
+import MessageView from '@/views/MessageView.vue'
+import HomeView from '@/views/HomeView.vue'
 
 const routes = [
+
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      keepAlive: true,
+    },
+    children: [
+      {
+        path: '/tool',
+        name: 'littleTool',
+        component: LittleTool,
+        meta: {
+          keepAlive: true,
+        }
+      },
+       {   
+        path: '/wechat/msg',
+        name: 'wechatMsg',
+        component: MessageView,
+      meta: {
+        keepAlive: true,
+      }
+      },
+    ]
   },
-  {
-    path: '/msg',
-    name: 'msg',
-    component: MessageView
-  }
+
 ]
 
 const router = createRouter({

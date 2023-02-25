@@ -1,9 +1,11 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>
-    <!-- <router-link to="/msg">msg</router-link> -->
-  </nav>
-  <router-view></router-view>
+  <!-- <router-view></router-view> -->
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
+
 </template>
 
 <style>

@@ -21,8 +21,12 @@
 <script  setup>
 import request from "../http";
 import { ElNotification } from "element-plus";
-import { ref } from "vue";
-import { onMounted } from "vue";
+import { VueElement } from "vue";
+import {  getCurrentInstance,ref, onMounted } from "vue";
+
+//相当于 vue2 的this 获取全局挂载的变量
+const { appContext } = getCurrentInstance();
+const global = appContext.config.globalProperties;
 
 //常用变量
 let msg = "";
@@ -33,10 +37,10 @@ let size = ref(10);
 onMounted(() => {
   let result = getMessage("note");
   console.log(result + "aaaaaa");
+
 });
 
 //获取信息
-
 async function getMessage(msgKey) {
   let result = await request.fetchPost("/msg/list", {
     current: current.value,
@@ -61,12 +65,20 @@ function alertMsg(title, flag, time) {
   if (flag) {
     type = "success";
   }
-  ElNotification({
+  let msg = {
     title: title,
     type: type,
     duration: time,
-  });
+  };
+  console.log(global)
+  global.$notify(msg);
+  // ElNotification({
+  //   title: title,
+  //   type: type,
+  //   duration: time,
+  // });
 }
+
 </script>
 
 

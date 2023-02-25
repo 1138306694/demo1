@@ -5,13 +5,20 @@ import store from './store'
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
 import moment from 'moment/moment'
-// import axios from 'axios'
 
+
+//css
+import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 const app = createApp(App);
 app.use(store)
 app.use(router)
 app.use(moment)
-app.use(ElementPlus, { size: 'large', zIndex: 3000 })
+app.use(ElementPlus, { size: 'large', zIndex: 3000 ,locale: 'zhCn'})
+
+// 去除控制台警告信息
+app.config.warnHandler = () => null
+
 app.mount('#app')
 
 // createApp(App).use(store).use(router).mount('#app').config.globalProperties.$http = axios

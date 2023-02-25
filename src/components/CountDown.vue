@@ -16,8 +16,8 @@ export default {
   },
   props: {
     //接收父组件的数据
-    endTime: { type: String, default: "" },
-    endText: { type: String, default: "还不走等啥呢" },
+    endTime: {  default: "" },
+    endText: {  default: "还不走等啥呢" },
   },
   watch: {
     //监听时间的变化
