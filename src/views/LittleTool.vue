@@ -4,6 +4,7 @@
       <!-- 下班打卡计时 -->
       <el-col :span="8"
         ><div class="grid-content ep-bg-purple" />
+       <!-- 累计功德 -->
         <el-tooltip
           effect="light"
           :visible="visible"
@@ -26,31 +27,31 @@
 
         <div id="but" @click="count1(1.5, '功德无量', '功德')">
           <div class="demo-datetime-picker">
-            <div class="block">
-              <span class="demonstration">时间:{{ afterSixTime / 1000 }}</span>
-              <el-date-picker
+            <div class="block" v-if="setEndWorkTimeOver">
+              <!-- <span class="demonstration">时间:{{ afterSixTime / 1000 }}</span> -->
+              <el-date-picker 
                 v-model="afterSixTime"
                 type="datetime"
                 placeholder="今日修行结束时间"
                 :default-value="new Date()"
                 format="YYYY-MM-DD HH:mm:ss"
                 value-format="x"
+                @change="resetTime(false)"
               />
             </div>
           </div>
 
           <div class="home">
-            <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
-            <!-- <HelloWorldss msg="哈哈哈哈哈哈" /> -->
-
-            <CountDown
-              :endTime="afterSixTime / 1000"
-              :endText="还不走等啥呢"
-              @addGood="
-                count1(Math.round(Math.random() * 10) / 10, '工作修行', '功德')
-              "
-              @sendMsgAli="sendMsgAli()"
-            />
+            <!-- 重新实现 -->
+        <el-countdown
+        title="今日开心倒计时"
+        format="HH:mm:ss"
+        :value="countdownTime"
+        @finish="popMessage('完美结束','今天修行结束，开始开心的夜晚叭',true,9999)"
+      />
+      <el-button class="countdown-footer" type="primary" @click="resetTime(true)"
+        >{{ setEndWorkTimeOver == false ? '重新开始修行':'开始修行'}}
+      </el-button>
           </div>
         </div>
       </el-col>
@@ -167,12 +168,15 @@
 </template>
 <script scope setup>
 import { ref, onMounted } from "vue";
-import CountDown from "../components/CountDown.vue";
+// import CountDown from "../components/CountDown.vue";
 import request from "../http.js";
 import { ElNotification } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
-import moment from "moment";
+import moment, { now } from "moment";
 const afterSixTime = ref("");
+const countdownTime = ref();
+const setEndWorkTimeOver = ref(true);
+
 const count = ref(0);
 const visible = ref(false);
 
@@ -325,6 +329,7 @@ function saveCache(key, value) {
     popMessage("设置有误", key + "名字不存在", false, 1100);
   } else {
     window.localStorage.setItem(key, JSON.stringify(value));
+    console.log("设置本地缓存:"+key+",value:"+JSON.stringify(value));
   }
   if (key == "my" || key == "you" || key == "phone") {
     popMessage("设置完成", key + "为:" + JSON.stringify(value), true, 1900);
@@ -375,6 +380,63 @@ async function calculateDateChange() {
   }
 }
 
+//设置选择时间
+function resetTime(flag){
+  if(flag){
+    //将时间设置为空  为重新设置时间
+    countdownTime.value = new Date();
+    afterSixTime.value = new Date();
+  }else{
+    //为选中时间，设置为开始值
+    countdownTime.value = afterSixTime.value;
+    setWorkTime(countdownTime.value);
+  }
+  setEndWorkTimeOver.value = flag;
+}
+
+//设置今日下班时间
+function setWorkTime(date){
+  let nowDate = new Date();
+  let key = "workTime";
+  let value = {
+    "time":nowDate.getFullYear()+'' + nowDate.getMonth()+nowDate.getDate(),
+    "value":date
+  };
+  saveCache(key,value);
+}
+
+function getWorkTime(){
+  let key = "workTime";
+  let value = getCache(key);
+  console.log("获取缓存work时间",value)
+if(value){
+    // 存在记录，比较时间是否为今日
+    let cacheDate = value.time;
+    let cacheTime = value.value;
+     let nowDate = new Date();
+
+      console.log("nowDategetFullYear",nowDate.getFullYear()+'' + nowDate.getMonth()+nowDate.getDate());
+      console.log("cacheDategetFullYear",cacheDate);
+     if((nowDate.getFullYear()+'' + nowDate.getMonth()+nowDate.getDate()) == cacheDate){
+      //时间为今日，则使用，否则不做处理
+      //修改默认时间为缓存时间
+      afterSixTime.value = cacheTime;
+      countdownTime.value = cacheTime;
+      resetTime(false);
+     }else{
+      resetTime(true);
+     }
+     
+}
+
+}
+
+function startEndWork(){
+  //今日页面 先处理当前记录时间
+  getWorkTime();
+}
+
+
 onMounted(() => {
   count1(8, "初来乍到", "功德");
 
@@ -386,6 +448,10 @@ onMounted(() => {
   setNmae();
   //彩虹屁
   sayGood(myName, youName);
+//开始下班倒计时
+  startEndWork();
+
+
 });
 </script>
 
@@ -394,7 +460,7 @@ onMounted(() => {
 export default {
   name: "LittleTool",
   components: {
-    CountDown,
+  
   },
   mounted() {},
 };

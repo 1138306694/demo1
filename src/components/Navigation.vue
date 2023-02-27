@@ -16,6 +16,7 @@
       v-for="menu in allMenu"
       :key="menu.menuid"
       :index="menu.menuName.toString()"
+      :disabled="!menu.isShow"
     >
       <template #title>
         <el-icon v-if="menu.icon">
@@ -24,17 +25,18 @@
         <span>{{ menu.menuTitle }}</span>
       </template>
       <el-menu-item
-        v-if="menu.menus == null || menu.menus.length == 0"
+        v-if="menu.menus == null || menu.menus.length == 0 "
         :index="menu.url.toString()"
         :route="'/' + menu.url"
       >
-        {{ menu.menuName }}</el-menu-item
-      >
+        {{ menu.menuName }}</el-menu-item>
+
       <el-menu-item
         v-for="subMenu in menu.menus"
         :key="subMenu.menuid"
         :index="subMenu.menuName.toString()"
         :route="'/' + subMenu.url"
+        :disabled="!subMenu.isShow"
       >
         {{ subMenu.menuName }}
       </el-menu-item>
@@ -72,6 +74,7 @@ export default {
         menuName: "小工具合集",
         url: "tool",
         menuTitle: "亿点小工具",
+        isShow: true,
         menus: [],
       },
       {
@@ -81,6 +84,7 @@ export default {
         menuTitle: "work",
         hasThird: null,
         url: null,
+        isShow: true,
         menus: [
           {
             menuid: 21,
@@ -98,6 +102,7 @@ export default {
         menuName: "微信相关",
         menuTitle: "微信相关",
         hasThird: null,
+        isShow: true,
         menus: [
           {
             menuid: 31,
@@ -106,7 +111,7 @@ export default {
             hasThird: "N",
             url: "wechat/msg",
             menus: null,
-            isShow: true,
+            isShow: false,
           },
           {
             menuid: 32,

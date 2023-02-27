@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElCountdown: typeof import('element-plus/es')['ElCountdown']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -34,5 +35,6 @@ declare module '@vue/runtime-core' {
     Navigation: typeof import('./src/components/Navigation.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WorkTeam: typeof import('./src/components/WorkTeam.vue')['default']
   }
 }

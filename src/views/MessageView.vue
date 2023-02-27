@@ -1,18 +1,24 @@
 
 <template>
   <div class="table">
-    <el-table :data="tableData" style="width: 60%">
-      <el-table-column fixed prop="id" label="id" width="100" />
-      <el-table-column prop="createData" label="日期" width="180" />
-      <el-table-column prop="msgValue" label="内容" width="400" />
-      <el-table-column prop="createBy" label="创建人" width="100" />
-      <el-table-column prop="msgKey" label="关键字" width="70" />
-      <el-table-column fixed="right" label="操作" width="120">
-        <template #default>
-          <el-button link type="primary" size="small" @click="handleClick"
+    <el-table :data="tableData" style="width: 90%" fit border >
+      <el-table-column fixed prop="id" label="id" min-width="30px" align="center" />
+      <el-table-column prop="createData" label="日期" align="center" />
+      <el-table-column prop="msgValue" label="内容" min-width="120px" show-overflow-tooltip align="center"  />
+      <el-table-column prop="createBy" label="创建人" min-width="40px" align="center" />
+      <el-table-column prop="msgKey" label="关键字" min-width="40px" align="center" />
+      <el-table-column prop="isDeleted" label="是否已推送" min-width="50px" align="center" >
+        <template #default="scope">
+          <span v-if="scope == 0">未推送</span>
+          <span v-else> 已推送</span>
+        </template>
+        </el-table-column>
+      <el-table-column fixed="right" label="操作" min-width="40px" align="center" >
+        <template #default="scope">
+          <el-button link type="primary" size="small" @click="handleClick(scope.row)"
             >查看</el-button
           >
-          <el-button link type="primary" size="small">编辑</el-button>
+          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,10 +59,14 @@ async function getMessage(msgKey) {
   console.log(tableData.value + "table");
 }
 
-//组件编辑事件
-function handleClick() {
-  alertMsg("点击了操作");
-  console.log("click");
+//组件点击事件  data 操作的数据
+function handleClick(data) {
+  alertMsg("点击了data:"+ data.id);
+}
+
+//组件编辑事件  data 操作的数据
+function handleEdit(data) {
+  alertMsg("点击了data:"+ data.id);
 }
 
 //消息弹窗
