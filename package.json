@@ -53,8 +53,8 @@
       "requireConfigFile": false
     },
     "rules": {
-      "suppressImplicitAnyIndexErrors": true,
-      "vue/multi-word-component-names": false,
+      "suppressImplicitAnyIndexErrors": 0,
+      "vue/multi-word-component-names": 0,
       "no-unused-vars": 0
     }
   },
