@@ -1,5 +1,8 @@
 <template>
-  <el-config-provider :locale="zhCn">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+</head>
+<el-config-provider :locale="zhCn">
     <el-row :gutter="10" class="top" justify="center">
       <!-- 下班打卡计时 -->
       <el-col :span="8"
