@@ -25,23 +25,21 @@
 
 <script setup>
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
-
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const colorMode = useColorMode();
 </script>
 
 <script>
-import Navigation from "@/components/Navigation.vue";
+// import navigation from "@/components/Navigation.vue";
+
 export default {
-  data() {
-    return {
-      showtype: false,
-    };
-  },
-  components() {
-    // Navigation
-  },
+    data() {
+        return {};
+    },
+    components() {
+        // Navigation
+    },
 };
 </script>
 

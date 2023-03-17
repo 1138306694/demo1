@@ -175,6 +175,27 @@
         </div>
       </el-col>
     </el-row>
+    <el-row style="float: left">
+      <el-col class="reduceImg" :push="8">
+        <div>
+          <el-input
+            v-model="reducePostUrl"
+            :rows="2"
+            type="textarea"
+            placeholder="输入压缩请求ip地址,不填默认服务器，容易oom"
+          />
+        </div>
+        <div>
+          <el-input
+            v-model="reduceUrl"
+            :rows="2"
+            type="textarea"
+            placeholder="请输入压缩图片URL"
+          />
+        </div>
+        <el-button @click="reduceImg" type="primary">开始压缩 </el-button>
+      </el-col>
+    </el-row>
   </el-config-provider>
 </template>
 <script scope setup>
@@ -210,6 +231,9 @@ const myPhoneInputIsHave = ref(true);
 const sayGoodMsgMaxCount = ref();
 //总计
 const maxCount = ref(10);
+
+const reduceUrl = ref();
+const reducePostUrl = ref();
 
 const sayGoodMsg = ref("记得设置名字呀");
 //缓存最大次数的key
@@ -389,21 +413,40 @@ async function calculateDateChange() {
       addDay.value;
   }
 }
+//压缩图片
+async function reduceImg(){
+  if(reduceUrl.value){
+    var tempUrl = "";
+    if(reducePostUrl.value){
+      tempUrl = reducePostUrl.value;
+    }
+    let result = await request.fetchGet(
+    tempUrl+"/until/reduce/img?url=" + reduceUrl.value,
+    ""
+  );
+  if(result.data.success){
+    popMessage("压缩完成",result.data.data,result.data.success,5000);
+  }
+  }else{
+    popMessage("请输入图片地址","","fail",2000);
+  }
+
+}
 
 //设置选择时间
 function resetTime(flag) {
   var countTime = moment(nowTime).format("X");
-  var afterTime =  moment(afterSixTime.value).format("YYYY-MM-DD HH:mm:ss");
+  var afterTime = moment(afterSixTime.value).format("YYYY-MM-DD HH:mm:ss");
   if (flag) {
     //将时间设置为空  为重新设置时间
-    var nowTime = new Date().getTime()-1;
+    var nowTime = new Date().getTime() - 1;
     countdownTime.value = countTime;
     afterSixTime.value = afterTime;
   } else {
     //为选中时间，设置为开始值
-    console.log("afterSixTime.value",afterSixTime.value);
+    console.log("afterSixTime.value", afterSixTime.value);
     countdownTime.value = moment(afterTime).valueOf();
-    console.log("设置的倒计时实际:",countdownTime.value);
+    console.log("设置的倒计时实际:", countdownTime.value);
     //缓存当前记录时间
     setWorkTime(afterTime);
   }
@@ -532,5 +575,9 @@ export default {
   float: left;
   margin-left: 110px;
   margin-top: 40px;
+}
+.reduceImg {
+  float: left;
+  width: 240px;
 }
 </style>

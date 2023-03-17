@@ -8,8 +8,12 @@ axios.defaults.headers.post['X-SOURCE-FROM']  = 'wehat';
 axios.defaults.headers.get['X-SOURCE-FROM']  = 'wehat';
 console.log(axios.defaults, '......axios.......');
 
-
-axios.defaults.baseURL = 'https://wechat.nxqlhhk.top/' //生产环境;  49.232.162.50
+//生产环境;  https://wechat.nxqlhhk.top/
+axios.defaults.baseURL = 'https://wechat.nxqlhhk.top/' 
+// 本地环境
+// let ip = "localhost";
+// let ip = "192.168.31.32";
+// axios.defaults.baseURL = 'http://'+ip+':1999/'
 // axios.defaults.headers.common['token'] = "";
 
 // POST传参序列化(添加请求拦截器)
@@ -42,7 +46,7 @@ axios.interceptors.request.use((config) => {
 //返回状态判断(添加响应拦截器)
 axios.interceptors.response.use((res) => {
     //对响应数据做些事客流量
-    if (!res.data.success) {
+    if (!res.data.success || !res.success) {
         return Promise.resolve(res);
     }
     return res;
