@@ -8,10 +8,10 @@ axios.defaults.headers.post['X-SOURCE-FROM']  = 'wechat';
 axios.defaults.headers.get['X-SOURCE-FROM']  = 'wechat';
 
 //跨域
-axios.defaults.headers.get['Access-Control-Allow-Origin']  = '*';
-axios.defaults.headers.post['Access-Control-Allow-Origin']  = '*';
-axios.defaults.headers.put['Access-Control-Allow-Origin']  = '*';
-axios.defaults.headers.delete['Access-Control-Allow-Origin']  = '*';
+axios.defaults.headers.get['access-control-allow-origin']  = '*';
+axios.defaults.headers.post['access-control-allow-origin']  = '*';
+axios.defaults.headers.put['access-control-allow-origin']  = '*';
+axios.defaults.headers.delete['access-control-allow-origin']  = '*';
 
 console.log(axios.defaults, '......axios.......');
 
