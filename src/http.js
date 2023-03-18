@@ -3,9 +3,16 @@ import axios from 'axios'
 axios.defaults.timeout = 50000;      //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/json';        //配置请求头
 axios.defaults.headers.put['Content-Type'] = 'application/json';
-axios.defaults.headers.put['X-SOURCE-FROM']  = 'wehat';       //配置请求头
-axios.defaults.headers.post['X-SOURCE-FROM']  = 'wehat';
-axios.defaults.headers.get['X-SOURCE-FROM']  = 'wehat';
+axios.defaults.headers.put['X-SOURCE-FROM']  = 'wechat';       //配置请求头
+axios.defaults.headers.post['X-SOURCE-FROM']  = 'wechat';
+axios.defaults.headers.get['X-SOURCE-FROM']  = 'wechat';
+
+//跨域
+axios.defaults.headers.get['Access-Control-Allow-Origin']  = '*';
+axios.defaults.headers.post['Access-Control-Allow-Origin']  = '*';
+axios.defaults.headers.put['Access-Control-Allow-Origin']  = '*';
+axios.defaults.headers.delete['Access-Control-Allow-Origin']  = '*';
+
 console.log(axios.defaults, '......axios.......');
 
 //生产环境;  https://wechat.nxqlhhk.top/
