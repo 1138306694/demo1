@@ -1,24 +1,19 @@
 import axios from 'axios'
 
+
 axios.defaults.timeout = 50000;      //响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/json';        //配置请求头
 axios.defaults.headers.put['Content-Type'] = 'application/json';
 axios.defaults.headers.put['X-SOURCE-FROM']  = 'wechat';       //配置请求头
 axios.defaults.headers.post['X-SOURCE-FROM']  = 'wechat';
 axios.defaults.headers.get['X-SOURCE-FROM']  = 'wechat';
-
-//跨域
-axios.defaults.headers.get['access-control-allow-origin']  = '*';
-axios.defaults.headers.post['access-control-allow-origin']  = '*';
-axios.defaults.headers.put['access-control-allow-origin']  = '*';
-axios.defaults.headers.delete['access-control-allow-origin']  = '*';
-
+axios.defaults.headers.get['Access-Control-Allow-Origin']  = '*';
 console.log(axios.defaults, '......axios.......');
 
 //生产环境;  https://wechat.nxqlhhk.top/
 axios.defaults.baseURL = 'https://wechat.nxqlhhk.top/' 
 // 本地环境
-// let ip = "localhost";
+let ip = "localhost";
 // let ip = "192.168.31.32";
 // axios.defaults.baseURL = 'http://'+ip+':1999/'
 // axios.defaults.headers.common['token'] = "";
@@ -29,6 +24,20 @@ axios.interceptors.request.use((config) => {
     // if(window.openId){
     //     config.headers.token = window.openId;
     // };
+
+    // 处理baseUrl
+    var url = config.url;
+    if(url.startsWith("http") || url.startsWith("https") || url.startsWith("/bpi")){
+        //跨域名的请求直接使用当前url
+    }else{
+        //需要添加基础url
+        config.url = config.baseURL + url;
+    }
+    //重置baseurl 去除跨域
+    config.baseURL="";
+
+
+    console.log("requestConfig--->",config)
     console.log(config.data, '@@@@@@@');
     if (config.method == 'post' && config.data.pull) {
         // console.log(axios.interceptors.response);
@@ -52,13 +61,14 @@ axios.interceptors.request.use((config) => {
 
 //返回状态判断(添加响应拦截器)
 axios.interceptors.response.use((res) => {
+    console.log("response---->",res)
     //对响应数据做些事客流量
     if (!res.data.success || !res.success) {
         return Promise.resolve(res);
     }
     return res;
 }, (error) => {
-    console.log('网络异常')
+    console.log('网络异常--->',error)
     return Promise.reject(error);
 });
 

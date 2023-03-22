@@ -1,7 +1,6 @@
 <template>
-
-<el-config-provider :locale="zhCn">
-    <el-row :gutter="10" class="top" justify="center">
+  <el-config-provider :locale="zhCn">
+    <el-row :gutter="10" class="top row">
       <!-- 下班打卡计时 -->
       <el-col :span="8"
         ><div class="grid-content ep-bg-purple" />
@@ -176,26 +175,64 @@
         </div>
       </el-col>
     </el-row>
-    <el-row style="float: left">
-      <el-col class="reduceImg" :push="8">
-        <div>
-          <el-input
-            v-model="reducePostUrl"
-            :rows="2"
-            type="textarea"
-            placeholder="输入压缩请求ip地址,不填默认服务器，容易oom"
-          />
-        </div>
-        <div>
-          <el-input
-            v-model="reduceUrl"
-            :rows="2"
-            type="textarea"
-            placeholder="请输入压缩图片URL"
-          />
-        </div>
-        <el-button @click="reduceImg" type="primary">开始压缩 </el-button>
+    <el-row class="row" :gutter="20">
+      <el-col class="reduceImg" :span="6" :push="1">
+        <el-input
+          class="topPx"
+          v-model="reduceUrl"
+          :rows="2"
+          type="textarea"
+          placeholder="请输入压缩图片URL"
+        />
+        <el-input
+          class="topPx splitCell"
+          v-model="reducePostUrl"
+          :rows="2"
+          type="textarea"
+          placeholder="输入压缩请求ip地址,不填默认服务器，容易oom"
+        />
+        <el-button class="topPx splitCell" @click="reduceImg" type="primary"
+          >开始压缩
+        </el-button>
       </el-col>
+      <el-col :span="6" :push="2">
+        <div>
+          <el-input
+            v-model="translationText"
+            :rows="2"
+            type="textarea"
+            placeholder="输入翻译文本"
+            :autosize="{minRows: 2, maxRows: 10 }"
+            show-word-limit
+            @input="toTranslation"
+            class="topPx"
+          />
+          <div >
+            <el-input
+              v-model="translationResult"
+              :rows="2"
+              type="textarea"
+              placeholder="翻译结果"
+              show-word-limit
+              :autosize="{minRows: 2, maxRows: 10 }"
+              disabled
+              class="topPx"
+            />
+          </div>
+          <div id="selectlanguage">
+            <el-select v-model="nowChinese" filterable class="topPx" @change="toTranslation">
+              <el-option
+                v-for="key in selectChinese"
+                :key="key.key"
+                :value="key.key"
+                :label="key.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8"> </el-col>
     </el-row>
   </el-config-provider>
 </template>
@@ -205,7 +242,8 @@ import { ref, onMounted } from "vue";
 import request from "../http.js";
 import { ElNotification } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
-import moment, { now } from "moment";
+import moment from "moment";
+import md5 from "../js/md5";
 const afterSixTime = ref("");
 const countdownTime = ref();
 const setEndWorkTimeOver = ref(true);
@@ -235,6 +273,39 @@ const maxCount = ref(10);
 
 const reduceUrl = ref();
 const reducePostUrl = ref();
+
+let translationText = ref();
+let translationResult = ref();
+let nowChinese = ref("en");
+let selectChinese = [
+  { key: "zh", value: "中文" },
+  { key: "en", value: "英文" },
+  { key: "yue", value: "粤语" },
+  { key: "wyw", value: "文言文" },
+  { key: "jp", value: "日语" },
+  { key: "kor", value: "韩语" },
+  { key: "fra", value: "法语" },
+  { key: "spa", value: "西班牙语" },
+  { key: "th", value: "泰语" },
+  { key: "ara", value: "阿拉伯语" },
+  { key: "ru", value: "俄语" },
+  { key: "pt", value: "葡萄牙语" },
+  { key: "de", value: "德语" },
+  { key: "it", value: "意大利语" },
+  { key: "el", value: "希腊语" },
+  { key: "pl", value: "波兰语" },
+  { key: "bul", value: "保加利亚语" },
+  { key: "est", value: "爱沙尼亚语" },
+  { key: "dan", value: "丹麦语" },
+  { key: "fin", value: "芬兰语" },
+  { key: "cs", value: "捷克语" },
+  { key: "rom", value: "罗马尼亚语" },
+  { key: "slo", value: "斯洛文尼亚语" },
+  { key: "swe", value: "瑞典语" },
+  { key: "hu", value: "匈牙利语" },
+  { key: "cht", value: "繁体中文" },
+  { key: "vie", value: "越南语" },
+];
 
 const sayGoodMsg = ref("记得设置名字呀");
 //缓存最大次数的key
@@ -415,23 +486,22 @@ async function calculateDateChange() {
   }
 }
 //压缩图片
-async function reduceImg(){
-  if(reduceUrl.value){
+async function reduceImg() {
+  if (reduceUrl.value) {
     var tempUrl = "";
-    if(reducePostUrl.value){
+    if (reducePostUrl.value) {
       tempUrl = reducePostUrl.value;
     }
     let result = await request.fetchGet(
-    tempUrl+"/until/reduce/img?url=" + reduceUrl.value,
-    ""
-  );
-  if(result.data.success){
-    popMessage("压缩完成",result.data.data,result.data.success,5000);
+      tempUrl + "/until/reduce/img?url=" + reduceUrl.value,
+      ""
+    );
+    if (result.data.success) {
+      popMessage("压缩完成", result.data.data, result.data.success, 5000);
+    }
+  } else {
+    popMessage("请输入图片地址", "", "fail", 2000);
   }
-  }else{
-    popMessage("请输入图片地址","","fail",2000);
-  }
-
 }
 
 //设置选择时间
@@ -499,6 +569,31 @@ function getWorkTime() {
 function startEndWork() {
   //今日页面 先处理当前记录时间
   getWorkTime();
+}
+
+//翻译
+async function toTranslation() {
+  var appid = "20200409000414936";
+  var key = "KaBW0DZo4RzrAIeU8UB7";
+  var salt = new Date().getTime();
+  var q = translationText.value;
+  var sign = md5.MD5(appid + q + salt + key);
+  var result = await request.fetchGet(
+    "/bpi?appid=" +
+      appid +
+      "&q=" +
+      q +
+      "&from=auto&salt=" +
+      salt +
+      "&sign=" +
+      sign +
+      "&to=" +
+      nowChinese.value,
+    {}
+  );
+  if (result.data) {
+    translationResult.value = result.data.trans_result[0].dst;
+  }
 }
 
 onMounted(() => {
@@ -578,7 +673,36 @@ export default {
   margin-top: 40px;
 }
 .reduceImg {
+  width: 300px;
+}
+.cell {
   float: left;
-  width: 240px;
+  width: 300px;
+  height: 300px;
+  margin-left: 50px;
+}
+
+#selectlanguage {
+  width: 100px;
+  float: left;
+}
+.language {
+  width: 300px;
+  height: 60px;
+  float: left;
+}
+.row {
+  float: left;
+  margin: 30px;
+  height: 240px;
+  width: 1200px;
+}
+
+.topPx {
+  margin-top: 10px;
+}
+
+.splitCell {
+  float: left;
 }
 </style>

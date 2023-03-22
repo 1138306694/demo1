@@ -15,7 +15,23 @@ module.exports = defineConfig({
         resolvers: [ElementPlusResolver()],
       })
     ],
+  },
+  devServer: {
+    host: '0.0.0.0',
+    port: 8081,
+    open: false,
+    proxy: {
+      '/bpi': {
+        target: 'https://fanyi-api.baidu.com/api/trans/vip/translate',
+        changeOrigin: true,
+        "pathRewrite": {
+          '/bpi': ''
+        }
+      }
+    }
   }
   
 })
+
+
 

@@ -8,7 +8,6 @@ import moment from 'moment/moment'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import 'dayjs/locale/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-
 //css
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
