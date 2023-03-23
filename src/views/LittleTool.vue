@@ -202,25 +202,30 @@
             :rows="2"
             type="textarea"
             placeholder="输入翻译文本"
-            :autosize="{minRows: 2, maxRows: 10 }"
+            :autosize="{ minRows: 2, maxRows: 10 }"
             show-word-limit
             @input="toTranslation"
             class="topPx"
           />
-          <div >
+          <div>
             <el-input
               v-model="translationResult"
               :rows="2"
               type="textarea"
               placeholder="翻译结果"
               show-word-limit
-              :autosize="{minRows: 2, maxRows: 10 }"
+              :autosize="{ minRows: 2, maxRows: 10 }"
               disabled
               class="topPx"
             />
           </div>
           <div id="selectlanguage">
-            <el-select v-model="nowChinese" filterable class="topPx" @change="toTranslation">
+            <el-select
+              v-model="nowChinese"
+              filterable
+              class="topPx"
+              @change="toTranslation"
+            >
               <el-option
                 v-for="key in selectChinese"
                 :key="key.key"
@@ -243,8 +248,6 @@ import request from "../http.js";
 import { ElNotification } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import moment from "moment";
-// import md5 from "../js/md5";
-import md5 from "/src/js/md5";
 const afterSixTime = ref("");
 const countdownTime = ref();
 const setEndWorkTimeOver = ref(true);
@@ -574,26 +577,14 @@ function startEndWork() {
 
 //翻译
 async function toTranslation() {
-  var appid = "20200409000414936";
-  var key = "KaBW0DZo4RzrAIeU8UB7";
-  var salt = new Date().getTime();
-  var q = translationText.value;
-  var sign = md5.MD5(appid + q + salt + key);
-  var result = await request.fetchGet(
-    "/bpi?appid=" +
-      appid +
-      "&q=" +
-      q +
-      "&from=auto&salt=" +
-      salt +
-      "&sign=" +
-      sign +
-      "&to=" +
-      nowChinese.value,
-    {}
-  );
-  if (result.data && result.data.trans_result) {
-    translationResult.value = result.data.trans_result[0].dst;
+  var result = await request.fetchPost("/until/translation", {
+    from: "auto",
+    to: nowChinese.value,
+    channel: "bd",
+    query: translationText.value,
+  });
+  if (result && result.data) {
+    translationResult.value = result.data.datat;
   }
 }
 
