@@ -583,8 +583,11 @@ async function toTranslation() {
     channel: "bd",
     query: translationText.value,
   });
-  if (result && result.data) {
-    translationResult.value = result.data.datat;
+  console.log(result.data.data);
+  if (result && result.data && result.data.success) {
+    translationResult.value = result.data.data;
+  }else{
+    popMessage("翻译繁忙");
   }
 }
 
