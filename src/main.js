@@ -11,10 +11,12 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 //css
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+
 const app = createApp(App);
 app.use(store)
 app.use(router)
 app.use(moment)
+
 app.use(ElementPlus, { size: 'large', zIndex: 3000 ,locale: zhCn,})
 // 图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

@@ -243,7 +243,8 @@ import request from "../http.js";
 import { ElNotification } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import moment from "moment";
-import md5 from "../js/md5";
+// import md5 from "../js/md5";
+import md5 from "/src/js/md5";
 const afterSixTime = ref("");
 const countdownTime = ref();
 const setEndWorkTimeOver = ref(true);
@@ -591,7 +592,7 @@ async function toTranslation() {
       nowChinese.value,
     {}
   );
-  if (result.data) {
+  if (result.data && result.data.trans_result) {
     translationResult.value = result.data.trans_result[0].dst;
   }
 }
