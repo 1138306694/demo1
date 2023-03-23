@@ -202,7 +202,7 @@
             :rows="2"
             type="textarea"
             placeholder="输入翻译文本"
-            :autosize="{ minRows: 2, maxRows: 10 }"
+            :autosize="{ minRows: 2, maxRows: 100 }"
             show-word-limit
             @input="toTranslation"
             class="topPx"
@@ -214,12 +214,12 @@
               type="textarea"
               placeholder="翻译结果"
               show-word-limit
-              :autosize="{ minRows: 2, maxRows: 10 }"
+              :autosize="{ minRows: 2, maxRows: 100 }"
               disabled
               class="topPx"
             />
           </div>
-          <div id="selectlanguage">
+          <div class="selectlanguage">
             <el-select
               v-model="nowChinese"
               filterable
@@ -231,6 +231,23 @@
                 :key="key.key"
                 :value="key.key"
                 :label="key.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="selectlanguage">
+            <el-select
+              v-model="nowTranslationChannel"
+              filterable
+              class="topPx"
+              @change="toTranslation"
+            >
+              <el-option
+                v-for="key in selectTranslationChannel"
+                :key="key.key"
+                :value="key.key"
+                :label="key.value"
+                disabled
               >
               </el-option>
             </el-select>
@@ -281,6 +298,7 @@ const reducePostUrl = ref();
 let translationText = ref();
 let translationResult = ref();
 let nowChinese = ref("en");
+let nowTranslationChannel = ref("bd");
 let selectChinese = [
   { key: "zh", value: "中文" },
   { key: "en", value: "英文" },
@@ -309,6 +327,10 @@ let selectChinese = [
   { key: "hu", value: "匈牙利语" },
   { key: "cht", value: "繁体中文" },
   { key: "vie", value: "越南语" },
+];
+let selectTranslationChannel = [
+  { key: "bd", value: "百度翻译" },
+  { key: "wangyi", value: "网易翻译" },
 ];
 
 const sayGoodMsg = ref("记得设置名字呀");
@@ -580,13 +602,13 @@ async function toTranslation() {
   var result = await request.fetchPost("/until/translation", {
     from: "auto",
     to: nowChinese.value,
-    channel: "bd",
+    channel: nowTranslationChannel.value,
     query: translationText.value,
   });
   console.log(result.data.data);
   if (result && result.data && result.data.success) {
     translationResult.value = result.data.data;
-  }else{
+  } else {
     popMessage("翻译繁忙");
   }
 }
@@ -677,9 +699,10 @@ export default {
   margin-left: 50px;
 }
 
-#selectlanguage {
-  width: 100px;
+.selectlanguage {
+  width: 120px;
   float: left;
+  margin-left: 10px;
 }
 .language {
   width: 300px;
