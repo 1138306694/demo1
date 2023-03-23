@@ -13,9 +13,9 @@ console.log(axios.defaults, '......axios.......');
 //生产环境;  https://wechat.nxqlhhk.top/
 axios.defaults.baseURL = 'https://wechat.nxqlhhk.top/' 
 // 本地环境
-let ip = "localhost";
+// let ip = "localhost";
 // let ip = "192.168.31.32";
-axios.defaults.baseURL = 'http://'+ip+':1999/'
+// axios.defaults.baseURL = 'http://'+ip+':1999/'
 // axios.defaults.headers.common['token'] = "";
 
 // POST传参序列化(添加请求拦截器)
