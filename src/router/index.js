@@ -11,6 +11,7 @@ import WorkStuClass from '@/components/work/WorkStuClass.vue'
 import WorkStu from '@/components/work/WorkStu.vue'
 import WorkExam from '@/components/work/WorkExam.vue'
 import WorkRecord from '@/components/work/WorkRecord.vue'
+import UserHome from '@/components/UserHome.vue'
 
 
 
@@ -27,6 +28,13 @@ const routes = [
         path: '/tool',
         name: 'littleTool',
         component: LittleTool,
+        meta: {
+        }
+      }, 
+      {
+        path: '/tool/home',
+        name: 'UserHome',
+        component: UserHome,
         meta: {
         }
       },

@@ -1,7 +1,6 @@
 <template>
-  
-  <el-radio-group  v-model="isCollapse" style="margin-bottom: 10px">
-    <el-radio-button  :label="false">扩大</el-radio-button>
+  <el-radio-group v-model="isCollapse" style="margin-bottom: 10px">
+    <el-radio-button :label="false">扩大</el-radio-button>
     <el-radio-button :label="true">缩小</el-radio-button>
   </el-radio-group>
   <el-menu
@@ -25,18 +24,19 @@
         <span>{{ menu.menuTitle }}</span>
       </template>
       <el-menu-item
-        v-if="menu.menus == null || menu.menus.length == 0 "
+        v-if="menu.menus == null || menu.menus.length == 0"
         :index="menu.url.toString()"
         :route="menu.url"
         :disabled="!menu.isShow"
       >
-        {{ menu.menuName }}</el-menu-item>
+        {{ menu.menuName }}</el-menu-item
+      >
 
       <el-menu-item
         v-for="subMenu in menu.menus"
         :key="subMenu.menuid"
         :index="subMenu.menuName.toString()"
-        :route=" subMenu.url"
+        :route="subMenu.url"
         :disabled="!subMenu.isShow"
       >
         {{ subMenu.menuName }}
@@ -47,7 +47,7 @@
 
 <script  setup>
 import { ref } from "vue";
-import { Apple,Location,ChatDotRound } from '@element-plus/icons-vue';
+import { Apple, Location, ChatDotRound } from "@element-plus/icons-vue";
 
 const isCollapse = ref(false);
 const handleOpen = (key, keyPath) => {
@@ -66,7 +66,8 @@ export default {
       allMenu: [],
     };
   },
-  mounted() {    console.log("初始化菜单数据");
+  mounted() {
+    console.log("初始化菜单数据");
     let res = [
       {
         menuid: 1,
@@ -75,7 +76,22 @@ export default {
         url: "/tool",
         menuTitle: "亿点小工具",
         isShow: true,
-        menus: [],
+        menus: [
+          {
+            menuid: 11,
+            menuName: "小工具合集",
+            url: "/tool",
+            menus: null,
+            isShow: true,
+          },
+          {
+            menuid: 12,
+            menuName: "用户首页",
+            url: "/tool/home",
+            menus: null,
+            isShow: true,
+          },
+        ],
       },
       {
         menuid: 2,
@@ -108,7 +124,7 @@ export default {
             isShow: true,
           },
           {
-             menuid: 24,
+            menuid: 24,
             icon: "",
             menuName: "课表配置",
             url: "/work/course",
@@ -116,7 +132,7 @@ export default {
             isShow: true,
           },
           {
-             menuid: 25,
+            menuid: 25,
             icon: "",
             menuName: "学生班级",
             url: "/work/stu/class",
@@ -124,7 +140,7 @@ export default {
             isShow: true,
           },
           {
-             menuid: 26,
+            menuid: 26,
             icon: "",
             menuName: "学生配置",
             url: "/work/stu",
@@ -132,7 +148,7 @@ export default {
             isShow: true,
           },
           {
-             menuid: 27,
+            menuid: 27,
             icon: "",
             menuName: "考试配置",
             url: "/work/exam",
@@ -140,7 +156,7 @@ export default {
             isShow: true,
           },
           {
-             menuid: 28,
+            menuid: 28,
             icon: "",
             menuName: "成绩管理",
             url: "/work/record",

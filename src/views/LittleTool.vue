@@ -5,170 +5,83 @@
       <el-col :span="8"
         ><div class="grid-content ep-bg-purple" />
         <!-- 累计功德 -->
-        <el-tooltip
-          effect="light"
-          :visible="visible"
-          class="box-item"
-          placement="right"
-          auto-close="30"
-        >
+        <el-tooltip effect="light" :visible="visible" class="box-item" placement="right" auto-close="30">
           <template #content>
             <span>{{ addGoodMessage }}</span>
           </template>
-          <el-button
-            @click="count1(3, '功德加倍无量', '功德')"
-            size="large"
-            text
-            bg
-            round
-            >今日累计功德 :{{ Math.round(count * 10) / 10 }}</el-button
-          >
+          <el-button @click="count1(3, '功德加倍无量', '功德')" size="large" text bg round>今日累计功德 :{{ Math.round(count * 10) / 10 }}</el-button>
         </el-tooltip>
 
         <div id="but" @click="count1(1.5, '功德无量', '功德')">
           <div class="demo-datetime-picker">
             <div class="block" v-if="setEndWorkTimeOver">
               <!-- <span class="demonstration">时间:{{ afterSixTime / 1000 }}</span> -->
-              <el-time-select
-                v-model="afterSixTime"
-                min-time="17:30"
-                placeholder="课节结束时间"
-                start="17:30"
-                step="00:01"
-                end="23:59"
-                format="YYYY-MM-DD HH:mm:ss"
-                @change="resetTime(false)"
-              />
+              <el-time-select v-model="afterSixTime" min-time="17:30" placeholder="课节结束时间" start="17:30" step="00:01" end="23:59" format="YYYY-MM-DD HH:mm:ss" @change="resetTime(false)" />
             </div>
           </div>
 
           <div class="home">
             <!-- 重新实现 -->
-            <el-countdown
-              title="今日开心倒计时"
-              format="HH:mm:ss"
-              :value="countdownTime"
-              @finish="
+            <el-countdown title="今日开心倒计时" format="HH:mm:ss" :value="countdownTime" @finish="
                 popMessage(
                   '完美结束',
                   '今天修行结束，开始开心的夜晚叭',
                   true,
                   9999
                 )
-              "
-            />
-            <el-button
-              class="countdown-footer"
-              type="primary"
-              @click="resetTime(true)"
-              >{{ setEndWorkTimeOver == false ? "重新开始修行" : "开始修行" }}
+              " />
+            <el-button class="countdown-footer" type="primary" @click="resetTime(true)">{{ setEndWorkTimeOver == false ? "重新开始修行" : "开始修行" }}
             </el-button>
           </div>
         </div>
       </el-col>
       <!-- 夸一夸 -->
-      <el-col :span="6" :push="1"
-        ><div class="grid-content ep-bg-purple" />
+      <el-col :span="6" :push="1">
+        <div class="grid-content ep-bg-purple" />
         <p>
-          <span v-if="youName != null || youName != ''"
-            >my:{{ myName }}-----</span
-          >
+          <span v-if="youName != null || youName != ''">my:{{ myName }}-----</span>
           <span v-if="youName != null || youName != ''">you:{{ youName }}</span>
         </p>
-        <el-button
-          v-if="sayGoodMsgMaxCount > 0 && checkNameIsOver()"
-          style="width: 100px; background-color: lightgreen"
-          type="primary"
-          @click="sayGood(myName, youName)"
-        >
-          <span v-if="sayGoodMsgMaxCount == maxCount"
-            >夸一下,{{ sayGoodMsgMaxCount }}次</span
-          >
-          <span v-if="sayGoodMsgMaxCount > 0"
-            >再夸一下,{{ sayGoodMsgMaxCount }}次</span
-          >
+        <el-button v-if="sayGoodMsgMaxCount > 0 && checkNameIsOver()" style="width: 100px; background-color: lightgreen" type="primary" @click="sayGood(myName, youName)">
+          <span v-if="sayGoodMsgMaxCount == maxCount">夸一下,{{ sayGoodMsgMaxCount }}次</span>
+          <span v-if="sayGoodMsgMaxCount > 0">再夸一下,{{ sayGoodMsgMaxCount }}次</span>
           <span v-if="sayGoodMsgMaxCount < 0">今天夸够了啊，要知足</span>
         </el-button>
         <p>
           {{ sayGoodMsg }}
         </p>
         <div v-if="youNameInputIsHave">
-          <el-input
-            v-model="youName"
-            v-if="youNameInputIsHave"
-            placeholder="Your Name ---- 被夸的那个"
-            size="small"
-            clearable
-          >
+          <el-input v-model="youName" v-if="youNameInputIsHave" placeholder="Your Name ---- 被夸的那个" size="small" clearable>
             <template #append>
-              <el-button
-                v-if="youNameInputIsHave"
-                style="width: 100px; background-color: lightgreen"
-                type="primary"
-                @click="saveCache('you', youName)"
-                >Set You</el-button
-              >
+              <el-button v-if="youNameInputIsHave" style="width: 100px; background-color: lightgreen" type="primary" @click="saveCache('you', youName)">Set You</el-button>
             </template>
           </el-input>
         </div>
 
         <div v-if="myNameInputIsHave">
-          <el-input
-            v-model="myName"
-            v-if="myNameInputIsHave"
-            placeholder="My Name --- 配合夸的那个"
-            size="small"
-            class="w-50 m-2"
-            clearable
-          >
+          <el-input v-model="myName" v-if="myNameInputIsHave" placeholder="My Name --- 配合夸的那个" size="small" class="w-50 m-2" clearable>
             <template #append>
-              <el-button
-                v-if="myNameInputIsHave"
-                type="primary"
-                style="width: 100px; background-color: lightgreen"
-                @click="saveCache('my', myName)"
-                >set My</el-button
-              >
+              <el-button v-if="myNameInputIsHave" type="primary" style="width: 100px; background-color: lightgreen" @click="saveCache('my', myName)">set My</el-button>
             </template>
           </el-input>
         </div>
         <div v-if="myPhoneInputIsHave">
-          <el-input
-            v-model="phone"
-            placeholder="临近下班提醒短信手机号"
-            size="small"
-            class="w-50 m-2"
-            clearable
-          >
+          <el-input v-model="phone" placeholder="临近下班提醒短信手机号" size="small" class="w-50 m-2" clearable>
             <template #append>
-              <el-button
-                type="primary"
-                style="width: 100px; background-color: lightgreen"
-                @click="saveCache('phone', phone)"
-                >set My</el-button
-              >
+              <el-button type="primary" style="width: 100px; background-color: lightgreen" @click="saveCache('phone', phone)">set My</el-button>
             </template>
           </el-input>
         </div>
       </el-col>
       <!-- 日期计算 -->
-      <el-col :span="10" :push="2"
-        ><div class="grid-content ep-bg-purple" />
+      <el-col :span="10" :push="2">
+        <div class="grid-content ep-bg-purple" />
 
         <div class="date">
-          <el-input
-            v-model="sourceDate"
-            type="date"
-            placeholder="请输入计算开始时间"
-          />
+          <el-input v-model="sourceDate" type="date" placeholder="请输入计算开始时间" />
         </div>
         <div class="date">
-          <el-input-number
-            v-model="addDay"
-            :min="-9999"
-            :max="9999"
-            @change="calculateDateChange"
-          />
+          <el-input-number v-model="addDay" :min="-9999" :max="9999" @change="calculateDateChange" />
         </div>
         <div class="dateResult">
           <el-input v-model="calculateResult" disabled placeholder="计算结果" />
@@ -177,78 +90,26 @@
     </el-row>
     <el-row class="row" :gutter="20">
       <el-col class="reduceImg" :span="6" :push="1">
-        <el-input
-          class="topPx"
-          v-model="reduceUrl"
-          :rows="2"
-          type="textarea"
-          placeholder="请输入压缩图片URL"
-        />
-        <el-input
-          class="topPx splitCell"
-          v-model="reducePostUrl"
-          :rows="2"
-          type="textarea"
-          placeholder="输入压缩请求ip地址,不填默认服务器，容易oom"
-        />
-        <el-button class="topPx splitCell" @click="reduceImg" type="primary"
-          >开始压缩
+        <el-input class="topPx" v-model="reduceUrl" :rows="2" type="textarea" placeholder="请输入压缩图片URL" />
+        <el-input class="topPx splitCell" v-model="reducePostUrl" :rows="2" type="textarea" placeholder="输入压缩请求ip地址,不填默认服务器，容易oom" />
+        <el-button class="topPx splitCell" @click="reduceImg" type="primary">开始压缩
         </el-button>
       </el-col>
       <el-col :span="6" :push="2">
         <div>
-          <el-input
-            v-model="translationText"
-            :rows="2"
-            type="textarea"
-            placeholder="输入翻译文本"
-            :autosize="{ minRows: 2, maxRows: 100 }"
-            show-word-limit
-            @input="toTranslation"
-            class="topPx"
-          />
+          <el-input v-model="translationText" :rows="2" type="textarea" placeholder="输入翻译文本" :autosize="{ minRows: 2, maxRows: 100 }" show-word-limit @input="toTranslation" class="topPx" />
           <div>
-            <el-input
-              v-model="translationResult"
-              :rows="2"
-              type="textarea"
-              placeholder="翻译结果"
-              show-word-limit
-              :autosize="{ minRows: 2, maxRows: 100 }"
-              disabled
-              class="topPx"
-            />
+            <el-input v-model="translationResult" :rows="2" type="textarea" placeholder="翻译结果" show-word-limit :autosize="{ minRows: 2, maxRows: 100 }" disabled class="topPx" />
           </div>
           <div class="selectlanguage">
-            <el-select
-              v-model="nowChinese"
-              filterable
-              class="topPx"
-              @change="toTranslation"
-            >
-              <el-option
-                v-for="key in selectChinese"
-                :key="key.key"
-                :value="key.key"
-                :label="key.value"
-              >
+            <el-select v-model="nowChinese" filterable class="topPx" @change="toTranslation">
+              <el-option v-for="key in selectChinese" :key="key.key" :value="key.key" :label="key.value">
               </el-option>
             </el-select>
           </div>
           <div class="selectlanguage">
-            <el-select
-              v-model="nowTranslationChannel"
-              filterable
-              class="topPx"
-              @change="toTranslation"
-            >
-              <el-option
-                v-for="key in selectTranslationChannel"
-                :key="key.key"
-                :value="key.key"
-                :label="key.value"
-                disabled
-              >
+            <el-select v-model="nowTranslationChannel" filterable class="topPx" @change="toTranslation">
+              <el-option v-for="key in selectTranslationChannel" :key="key.key" :value="key.key" :label="key.value" disabled>
               </el-option>
             </el-select>
           </div>
@@ -290,7 +151,7 @@ const myPhoneInputIsHave = ref(true);
 //缓存夸奖次数
 const sayGoodMsgMaxCount = ref();
 //总计
-const maxCount = ref(10);
+const maxCount = ref(1000);
 
 const reduceUrl = ref();
 const reducePostUrl = ref();
@@ -364,19 +225,25 @@ async function sayGood(my, you) {
   if (checkNameIsOver() && sayGoodMsgMaxCount.value > 0) {
     youNameInputIsHave.value = false;
     myNameInputIsHave.value = false;
+    
     // http://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc
+    //https://api.vvhan.com/api/love
+    // let result = await request.fetchGet(
+    //   "https://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc",
+    //   ""
+    // );
     let result = await request.fetchGet(
-      "https://api.tianapi.com/caihongpi/index?key=a90992593826fc57c993527b26d4aabc",
-      ""
+      "/until/love",
+      {}
     );
     console.log(
       "aaaa",
-      result.data.newslist[0].content
+      result.data.data
         .replace(/你/g, youName.value)
         .replace(/我/g, myName.value)
         .replace(/XXX/g, youName.value)
     );
-    sayGoodMsg.value = result.data.newslist[0].content
+    sayGoodMsg.value = result.data.data
       .replace(/你/g, youName.value)
       .replace(/我/g, myName.value)
       .replace(/XXX/g, youName.value);
@@ -455,7 +322,7 @@ async function sendMsgAli() {
     popMessage("下班提醒失败", "读取失败:name" + name + "phone：" + phone);
   }
 }
-
+//本地记录缓存
 function saveCache(key, value) {
   if (!value) {
     popMessage("设置有误", key + "名字不存在", false, 1100);
@@ -634,7 +501,7 @@ onMounted(() => {
 export default {
   name: "LittleTool",
   components: {},
-  mounted() {},
+  mounted() { },
 };
 </script>
 
@@ -691,12 +558,6 @@ export default {
 }
 .reduceImg {
   width: 300px;
-}
-.cell {
-  float: left;
-  width: 300px;
-  height: 300px;
-  margin-left: 50px;
 }
 
 .selectlanguage {

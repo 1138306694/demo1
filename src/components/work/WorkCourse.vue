@@ -45,7 +45,7 @@
     <!-- 星期下拉选 -->
     <el-col :span="4">
       <el-select
-        v-model="nowWorkClassId"
+        v-model="nowWeekDay"
         placeholder="选择星期"
         filterable
         clearable
@@ -124,6 +124,20 @@
           >
           </el-table-column>
           <el-table-column
+            prop="startTime"
+            min-width="60px"
+            label="上课时间"
+            align="center"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="endTime"
+            min-width="60px"
+            label="下课时间"
+            align="center"
+          >
+          </el-table-column>
+          <el-table-column
             prop="ext"
             min-width="60px"
             label="扩展"
@@ -163,8 +177,8 @@
     </el-col>
   </el-row>
 
-    <!-- 分页 -->
-    <el-row>
+  <!-- 分页 -->
+  <el-row>
     <el-col :span="10" :offset="7">
       <el-pagination
         background
@@ -283,13 +297,12 @@
       </span>
     </template>
   </el-dialog>
-
 </template>
   
   <script setup>
 import { getCurrentInstance, ref, onMounted } from "vue";
 import request from "../../http.js";
-import { weekdays } from "moment";
+import moment from "moment";
 //相当于 vue2 的this 获取全局挂载的变量
 const { appContext } = getCurrentInstance();
 const global = appContext.config.globalProperties;
@@ -351,6 +364,8 @@ let isWorkDayLable = [
   { key: 7, value: "星期日" },
 ];
 
+let workClassShow = [];
+
 function dealLable(row) {
   return getLableByKey(row.workDay, isWorkDayLable);
 }
@@ -406,6 +421,13 @@ async function getClass() {
   selectClassList.value = resultData.data;
   //默认选中 ---课节不需要自动选择
   //   nowWorkClassId.value = selectClassList.value[0].id;
+  workClassShow = [];
+  for(let value of resultData.data){
+    let classId = value.id;
+    let classMap = {"key":classId,"value":JSON.stringify(value)};
+    workClassShow.push(classMap);
+  }
+  console.log("课节ididid",workClassShow);
   console.log("加载课节数据", selectClassList.value, "nowID", nowTerm.value);
 }
 
@@ -457,13 +479,28 @@ function updateSelectList() {
   getPage();
 }
 
+async function getNowTerm() {
+  let result = await request.fetchGet("/work/term/now", {});
+  let resultData = result.data;
+  nowTerm.value = resultData.data.id;
+}
+
 async function initPageData() {
   //处理term
   await getTerm();
-  await getStuClass();
-  await getSubject();
-  await getClass();
+  //初始化的时候处理默认选择学期
+  await getNowTerm();
+  //初始化当前周几
+  let onWeek = moment().day();
+  if (onWeek == 0) {
+    onWeek = 7;
+  }
+  // await getClass();
+  nowWeekDay.value = onWeek;
   await getPage();
+  //这些下拉选可以慢慢加载不用同步
+  getSubject();
+  getStuClass();
 }
 // 请求页面数据
 async function getPage() {
@@ -476,13 +513,22 @@ async function getPage() {
       subjectId: nowWorkSubjectId.value,
       workClassId: nowWorkClassId.value,
       workStuClassId: nowWorkStuClassId.value,
+      workDay: nowWeekDay.value,
     },
   });
-  let resultData = result.data;
+  let resultData = result.data.data.records;
   //返回页面表格数据
-  tableData.value = resultData.data.records;
-  console.log("resultData", resultData);
-  setPage(resultData.data);
+  await getClass();
+ for( let value of resultData){
+  let classId = value.workClassId;
+  let classValue = JSON.parse(getLableByKey(classId,workClassShow));
+  console.log("classValueclassValueclassValue",classValue)
+  value.startTime = classValue.startTime;
+  value.endTime = classValue.endTime;
+ }
+  tableData.value = resultData;
+  console.log("ableData.valueableData.value",tableData.value);
+  setPage(result.data.data);
 }
 
 function setPage(data) {
